@@ -26,6 +26,16 @@ def e4():
                 if i*j > p: p = i*j
     print p
 
+def primeRange(top):
+    primes = []
+    for i in range(3,top,2):
+        prime = True
+        for j in range(int(i**0.5),int(i/2)):
+            if i % j == 0:
+                prime = False
+                break
+        if prime:
+            primes.append(i)
 
 def e10():
     sum = 2
@@ -34,9 +44,9 @@ def e10():
         for j in range(int(i**0.5),int(i/2)):
             if i % j == 0:
                 prime = False
+                break
         if prime:
             sum += i
-            print i
     print sum
 
 
