@@ -28,6 +28,7 @@ def e4():
 
 def primeRange(top):
     primes = []
+    factors = []
     for i in range(3,top,2):
         prime = True
         for j in range(int(i**0.5),int(i/2)):
@@ -36,17 +37,15 @@ def primeRange(top):
                 break
         if prime:
             primes.append(i)
+        else:
+            factors.append(i)
+    return (primes,factors)
 
 def e10():
-    sum = 2
-    for i in range(3,2000000,2):
-        prime = True
-        for j in range(int(i**0.5),int(i/2)):
-            if i % j == 0:
-                prime = False
-                break
-        if prime:
-            sum += i
+    sum = 0
+    pbsqrt,factors = primeRange(1415)
+    fasqrt = map(lambda x: 2000000/x, factors) #WIP
+    for i in range(1415)
     print sum
 
 
