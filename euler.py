@@ -17,6 +17,12 @@ def e2():
     y = (i for i in fibs if i % 2 == 0)
     return sum(y)
 
+def e3():
+    ans = 0
+    for i in eulerfuncs.primesbelow(775146):
+        if 600851475143 % i == 0:
+            ans = i
+    return ans
 
 def e4():
     p = 0
@@ -34,7 +40,7 @@ def e10():
 #-------------------------------------------------------------------------------
 
 
-euler = {1:e1, 2:e2, 4:e4, 10:e10}
+euler = {1:e1, 2:e2, 3:e3, 4:e4, 10:e10}
 
 def main():
     print euler[input("Which Euler? ")]()
