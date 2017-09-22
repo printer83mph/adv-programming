@@ -15,7 +15,7 @@ def e2():
         fibs.append(x)
         x = fibs[-1] + fibs[-2]
     y = (i for i in fibs if i % 2 == 0)
-    print sum(y)
+    return sum(y)
 
 
 def e4():
@@ -24,11 +24,10 @@ def e4():
         for j in range(100,999):
             if str(i*j)==str(i*j)[::-1]:
                 if i*j > p: p = i*j
-    print p
+    return p
 
-def primeRange(top):
+def primerange(top):
     primes = []
-    factors = []
     for i in range(3,top,2):
         prime = True
         for j in range(int(i**0.5),int(i/2)):
@@ -37,16 +36,25 @@ def primeRange(top):
                 break
         if prime:
             primes.append(i)
-        else:
-            factors.append(i)
-    return (primes,factors)
+    return (primes)
+
+def primesbelow(top):
+    sum = 0
+    pbsqrt = primerange(int(math.sqrt(top))+1)
+    curprimes = range(3,top,2)
+    primes = [2]
+    for i in curprimes:
+        prime = True
+        for j in pbsqrt:
+            if (i % j == 0) and i != j:
+                prime = False
+                break
+        if prime:
+            primes.append(i)
+    return primes
 
 def e10():
-    sum = 0
-    pbsqrt,factors = primeRange(1415)
-    fasqrt = map(lambda x: 2000000/x, factors) #WIP
-    for i in range(1415)
-    print sum
+    return sum(primesbelow(2000000))
 
 
 #-------------------------------------------------------------------------------
@@ -55,7 +63,7 @@ def e10():
 euler = {1:e1, 2:e2, 4:e4, 10:e10}
 
 def main():
-    euler[input("Which Euler? ")]()
+    print euler[input("Which Euler? ")]()
 
 if __name__ == "__main__":
     main()
