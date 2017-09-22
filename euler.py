@@ -32,6 +32,13 @@ def e4():
                 if i*j > p: p = i*j
     return p
 
+def e5():
+    curlcm = 20
+    for i in range(1,21):
+        if curlcm % i != 0:
+            curlcm = curlcm * i
+            print i
+    return curlcm
 
 def e10():
     return sum(eulerfuncs.primesbelow(2000000))
@@ -40,7 +47,7 @@ def e10():
 #-------------------------------------------------------------------------------
 
 
-euler = {1:e1, 2:e2, 3:e3, 4:e4, 10:e10}
+euler = {1:e1, 2:e2, 3:e3, 4:e4, 5:e5, 10:e10}
 
 def main():
     print euler[input("Which Euler? ")]()
