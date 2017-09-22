@@ -16,8 +16,7 @@ for i in d1:
     print d1[i]
 
 l1 = []
-for i in d1:
-    l1.append(d1[i])
+l1 = d1.values()
 l1.sort()
 print l1
 
