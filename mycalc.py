@@ -20,3 +20,9 @@ def ffib(a):
 		final,num1,num2 = num2+final,num2,oldfinal
 		oldfinal = final
 	return num1
+
+def nfib(a):
+	num1, num2 = 0,1
+	for i in range(a):
+		num2,num1 = num1+num2,num2
+	return num1
