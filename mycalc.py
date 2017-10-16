@@ -1,3 +1,7 @@
+
+import sys
+from random import randint
+
 def add(a,b):
 	return a + b
 def sub(a,b):
@@ -21,8 +25,35 @@ def ffib(a):
 		oldfinal = final
 	return num1
 
-def nfib(a):
+def nfib(a,index=True):
 	num1, num2 = 0,1
-	for i in range(a):
-		num2,num1 = num1+num2,num2
+	if index:
+		for i in range(a):
+			num2,num1 = num1+num2,num2
+	else:
+		while num2<a:
+			num2,num1 = num1+num2,num2
 	return num1
+
+def montyhall(trials):
+	swwins = 0
+	stwins = 0
+	for i in range(trials):
+		goat = randint(0,2)
+		choice = randint(0,2)
+		if choice == goat:
+			swwins += 1
+		else:
+			if randint(0,1):
+				swwins += 1
+	for i in range(trials):
+		goat = randint(0,2)
+		choice = randint(0,2)
+		if choice == goat:
+			stwins += 1
+	print(swwins,"wins when switching",trials-swwins,"losses")
+	print(stwins,"wins when staying,",trials-stwins,"losses")
+
+if __name__ == "__main__":
+	if len(sys.argv) > 1:
+		print nfib(int(sys.argv[1]))
