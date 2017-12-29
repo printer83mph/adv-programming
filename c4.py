@@ -14,25 +14,29 @@ def main():
                 try:
                     col = int(input("Which column, player " + str(i) + "? "))-1
                     row = dropcoin(grid, col, i)
-                    winstate = checkwin(grid, row, col)
+                    for rowindex in range(6):
+                        for colindex in range(7):
+                            if grid[rowindex][colindex] != 0:
+                                winstate += checkwin(grid, rowindex, colindex)
                     break
                 except IndexError:
                     print("Column does not exist!")
                 except ValueError as err:
-                    print(err)
+                    print(err if err == "Column is full!" else "Please input a number!")
                 except:
                     print("How did you manage to do get this error???")
                     raise
-            for rrw in grid:
-                if 0 in rrw:
-                    break
-            else:
-                winstate = -1
             if winstate:
                 break
+            else:
+                for rrw in grid:
+                    if 0 in rrw:
+                        break
+                else:
+                    winstate = -1
     print()
     printgrid(grid)
-    print("Player", winstate, "won!")
+    print("Player", int(winstate/2), "won!")
 
 def printgrid(grid):
     """Prints out grid readably (for user)."""
@@ -61,7 +65,6 @@ def checkwin(grid, row, col):
             if not ((rowdiff == 0 and coldiff == 0) or row + rowdiff * 3 < 0 or col + coldiff * 3 < 0):
                 try:
                     for i in range(1, 4):
-                        print("Found", grid[row + rowdiff * i][col + coldiff * i], "at", row + rowdiff * i, ",", col + coldiff * i)
                         if grid[row + rowdiff * i][col + coldiff * i] != startnum:
                             break
                     else:
