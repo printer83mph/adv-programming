@@ -32,7 +32,7 @@ def main():
                 break
     print()
     printgrid(grid)
-    print("Player ", winstate, " won!")
+    print("Player", winstate, "won!")
 
 def printgrid(grid):
     """Prints out grid readably (for user)."""
@@ -58,9 +58,10 @@ def checkwin(grid, row, col):
     startnum = grid[row][col]
     for rowdiff in range(-1, 2):
         for coldiff in range(-1, 2):
-            if not (rowdiff == 0 and coldiff == 0):
+            if not ((rowdiff == 0 and coldiff == 0) or row + rowdiff * 3 < 0 or col + coldiff * 3 < 0):
                 try:
                     for i in range(1, 4):
+                        print("Found", grid[row + rowdiff * i][col + coldiff * i], "at", row + rowdiff * i, ",", col + coldiff * i)
                         if grid[row + rowdiff * i][col + coldiff * i] != startnum:
                             break
                     else:
