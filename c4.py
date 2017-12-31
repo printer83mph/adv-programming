@@ -11,7 +11,7 @@ def main():
             printgrid(grid)
             winstate = ply if getmove(ply, grid) else 0
             if winstate != 0:
-                print("Winstate is", winstate)
+                # print("Winstate is", winstate)
                 break
             else:
                 for rrw in grid:
@@ -48,7 +48,7 @@ def turnandcheck(ply, grid):
     for rowindex in range(6):
         for colindex in range(7):
             if grid[rowindex][colindex] == ply:
-                print(grid[rowindex][colindex])
+                # print(grid[rowindex][colindex])
                 if checkwin(grid, rowindex, colindex, ply): return True
     return False
 
@@ -77,14 +77,13 @@ def checkwin(grid, row, col, ply):
             if not ((rowdiff == 0 and coldiff == 0) or row + rowdiff * 3 < 0 or col + coldiff * 3 < 0):
                 try:
                     for i in range(1, 4):
-                        print("Found", grid[row + rowdiff * i][col + coldiff * i], "at", row + rowdiff * i, ",", col + coldiff * i)
+                        # print("Found", grid[row + rowdiff * i][col + coldiff * i], "at", row + rowdiff * i, ",", col + coldiff * i)
                         if grid[row + rowdiff * i][col + coldiff * i] != ply:
-                            print("No match found going", rowdiff, coldiff)
+                            # print("No match found going", rowdiff, coldiff)
                             break
                     else:
-                        print("Match found going", rowdiff, coldiff)
+                        # print("Match found going", rowdiff, coldiff)
                         return True
-                        print("This shouldn't run")
                 except IndexError:
                     pass
     return False
