@@ -2,8 +2,13 @@
 Connect 4 using 2d arrays
 """
 
+
 def main():
-    """Runs the game."""
+    """Runs connect 4 game
+
+    2 player game, goes until one wins or the board is full.
+    """
+
     grid = [[0 for j in range(7)] for i in range(6)]
     winstate = 0
     while not winstate:
@@ -27,8 +32,20 @@ def main():
     else:
         print("Player", winstate, "won!")
 
+
 def getmove(ply, grid):
-    """Gets player ply's move, returns True if player won else False. Catches exceptions"""
+    """Gets a player's move
+
+    Asks for input on player ply's move, catches errors, and inserts a coin in selected column. Catches exceptions.
+
+    Arguments:
+        ply {integer} -- Whoever's turn it is
+        grid {list} -- 2d list (6 rows, 7 columns) representing the board
+
+    Returns:
+        boolean -- Whether the player won or not
+    """
+
     while True:
         try:
             winstate = turnandcheck(ply, grid)
@@ -42,9 +59,21 @@ def getmove(ply, grid):
             raise
     return winstate
 
+
 def turnandcheck(ply, grid):
-    """Gets player's turn and returns True if they win. No exception catching"""
-    col = int(input("Which column, player " + str(ply) + "? "))-1
+    """Gets a player's move
+
+    Asks for input on player ply's move, catches errors, and inserts a coin in selected column. Doesn't catch exceptions.
+
+    Arguments:
+        ply {integer} -- Whoever's turn it is
+        grid {list} -- 2d list (6 rows, 7 columns) representing the board
+
+    Returns:
+        boolean -- Whether the player won or not
+    """
+
+    col = int(input("Which column, player " + str(ply) + "? ")) - 1
     dropcoin(grid, col, ply)
     for rowindex in range(6):
         for colindex in range(7):
@@ -54,14 +83,35 @@ def turnandcheck(ply, grid):
                     return True
     return False
 
+
 def printgrid(grid):
-    """Prints out grid readably (for user), newline at start."""
+    """Prints out the grid
+
+    Prints out a nicely formatted grid from a 2d list.
+
+    Arguments:
+        grid {list} -- 2d list (6 rows, 7 columns) representing the board
+    """
+
     print("\n1 2 3 4 5 6 7")
     for row in grid:
         print(" ".join(str(j) for j in row))
 
+
 def dropcoin(grid, col, ply):
-    """Attempts to drop a coin in the grid. Raises ValueError if not possible."""
+    """Drops a coin in column col
+
+    Attempts to drop a coin in column col, raises ValueError if column is full.
+
+    Arguments:
+        grid {list} -- 2d list (6 rows, 7 columns) representing the board
+        col {int} -- Index of column where coin is to be dropped
+        ply {int} -- Player whose number will be on the coin
+
+    Raises:
+        ValueError -- This will be raised if the selected column is full
+    """
+
     if grid[0][col] != 0:
         raise ValueError("Column is full!")
     if grid[5][col] == 0:
@@ -70,10 +120,24 @@ def dropcoin(grid, col, ply):
     rowindex = 0
     while grid[rowindex][col] == 0:
         rowindex += 1
-    grid[rowindex-1][col] = ply
+    grid[rowindex - 1][col] = ply
+
 
 def checkwin(grid, row, col, ply):
-    """Returns a number if it has won starting on the row,col inputs, o/w 0"""
+    """Check if a player has connected 4 starting from a point
+
+    Used to check if a player has won, if pointed at the beginning of a line of 4 this should return True.
+
+    Arguments:
+        grid {list} -- 2d list (6 rows, 7 columns) representing the board
+        row {int} -- Index of row to target
+        col {int} -- Index of column to target
+        ply {int} -- Player to check win for
+
+    Returns:
+        boolean -- True if player ply has connected 4 starting on (row,col) o/w False
+    """
+
     for rowdiff in range(-1, 2):
         for coldiff in range(-1, 2):
             if not ((rowdiff == 0 and coldiff == 0) or row + rowdiff * 3 < 0 or col + coldiff * 3 < 0):
@@ -89,6 +153,7 @@ def checkwin(grid, row, col, ply):
                 except IndexError:
                     pass
     return False
+
 
 if __name__ == "__main__":
     main()
