@@ -7,26 +7,11 @@ def main():
     grid = [[0 for j in range(7)] for i in range(6)]
     winstate = 0
     while not winstate:
-        for i in range(1, 3):
-            print()
+        for ply in range(1, 3):
             printgrid(grid)
-            while True:
-                try:
-                    col = int(input("Which column, player " + str(i) + "? "))-1
-                    row = dropcoin(grid, col, i)
-                    for rowindex in range(6):
-                        for colindex in range(7):
-                            if grid[rowindex][colindex] != 0:
-                                winstate += checkwin(grid, rowindex, colindex)
-                    break
-                except IndexError:
-                    print("Column does not exist!")
-                except ValueError as err:
-                    print(err if err == "Column is full!" else "Please input a number!")
-                except:
-                    print("How did you manage to do get this error???")
-                    raise
-            if winstate:
+            winstate = ply if getmove(ply, grid) else 0
+            if winstate != 0:
+                print("Winstate is", winstate)
                 break
             else:
                 for rrw in grid:
@@ -34,13 +19,42 @@ def main():
                         break
                 else:
                     winstate = -1
-    print()
+        if winstate:
+            break
     printgrid(grid)
-    print("Player", int(winstate/2), "won!")
+    if winstate == -1:
+        print("Tie! No one wins")
+    else:
+        print("Player", winstate, "won!")
+
+def getmove(ply, grid):
+    """Gets player ply's move, returns True if player won else False"""
+    while True:
+        try:
+            winstate = turnandcheck(ply, grid)
+            break
+        except IndexError:
+            print("Column does not exist!")
+        except ValueError as err:
+            print(err if err == "Column is full!" else "Please input a number!")
+        except:
+            print("How did you manage to do get this error???")
+            raise
+    return winstate
+
+def turnandcheck(ply, grid):
+    col = int(input("Which column, player " + str(ply) + "? "))-1
+    dropcoin(grid, col, ply)
+    for rowindex in range(6):
+        for colindex in range(7):
+            if grid[rowindex][colindex] == ply:
+                print(grid[rowindex][colindex])
+                if checkwin(grid, rowindex, colindex, ply): return True
+    return False
 
 def printgrid(grid):
-    """Prints out grid readably (for user)."""
-    print("1 2 3 4 5 6 7")
+    """Prints out grid readably (for user), newline at start."""
+    print("\n1 2 3 4 5 6 7")
     for row in grid:
         print(" ".join(str(j) for j in row))
 
@@ -50,28 +64,30 @@ def dropcoin(grid, col, ply):
         raise ValueError("Column is full!")
     if grid[5][col] == 0:
         grid[5][col] = ply
-        return 5
+        return
     rowindex = 0
     while grid[rowindex][col] == 0:
         rowindex += 1
     grid[rowindex-1][col] = ply
-    return rowindex - 1
 
-def checkwin(grid, row, col):
+def checkwin(grid, row, col, ply):
     """Returns a number if it has won starting on the row,col inputs, o/w 0"""
-    startnum = grid[row][col]
     for rowdiff in range(-1, 2):
         for coldiff in range(-1, 2):
             if not ((rowdiff == 0 and coldiff == 0) or row + rowdiff * 3 < 0 or col + coldiff * 3 < 0):
                 try:
                     for i in range(1, 4):
-                        if grid[row + rowdiff * i][col + coldiff * i] != startnum:
+                        print("Found", grid[row + rowdiff * i][col + coldiff * i], "at", row + rowdiff * i, ",", col + coldiff * i)
+                        if grid[row + rowdiff * i][col + coldiff * i] != ply:
+                            print("No match found going", rowdiff, coldiff)
                             break
                     else:
-                        return startnum
+                        print("Match found going", rowdiff, coldiff)
+                        return True
+                        print("This shouldn't run")
                 except IndexError:
                     pass
-    return 0
+    return False
 
 if __name__ == "__main__":
     main()
