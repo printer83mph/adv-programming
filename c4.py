@@ -28,7 +28,7 @@ def main():
         print("Player", winstate, "won!")
 
 def getmove(ply, grid):
-    """Gets player ply's move, returns True if player won else False"""
+    """Gets player ply's move, returns True if player won else False. Catches exceptions"""
     while True:
         try:
             winstate = turnandcheck(ply, grid)
@@ -43,13 +43,15 @@ def getmove(ply, grid):
     return winstate
 
 def turnandcheck(ply, grid):
+    """Gets player's turn and returns True if they win. No exception catching"""
     col = int(input("Which column, player " + str(ply) + "? "))-1
     dropcoin(grid, col, ply)
     for rowindex in range(6):
         for colindex in range(7):
             if grid[rowindex][colindex] == ply:
                 # print(grid[rowindex][colindex])
-                if checkwin(grid, rowindex, colindex, ply): return True
+                if checkwin(grid, rowindex, colindex, ply):
+                    return True
     return False
 
 def printgrid(grid):
