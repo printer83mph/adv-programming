@@ -1,23 +1,32 @@
-
-const snakeDelay = 100;
+const fruitSize = 2;
 const gridSize = 20;
 const blockSize = 800/gridSize;
-var canvas,ctx,snakeDir,snakeXs,snakeYs,currentFruitX,currentFruitY;
+var canvas,ctx,snakeDir,snakeXs,snakeYs,currentFruitX,currentFruitY,fruitCooldown,timeOut,lose,snakeDelay,score;
 
 window.onload = function() {
     canvas = document.getElementById("canvas");
-    canvas.addEventListener("keypress",keyPressed,false);
+    document.addEventListener("keypress",keyPressed,false);
     ctx = canvas.getContext("2d");
+    ctx.textAlign = "right";
+    ctx.font = "30px Arial";
+    reset();
+}
+
+function reset() {
+    lose = false;
     snakeDir = "RIGHT";
     snakeXs = [3,4,5];
     snakeYs = [3,3,3];
     currentFruitX = 5;
     currentFruitY = 5;
-    setTimeout(moveSnake,snakeDelay);
+    fruitCooldown = 0;
+    snakeDelay = 180;
+    score = 0;
+    timeOut = setTimeout(moveSnake,snakeDelay);
 }
 
 function moveSnake() {
-    clearTimeout();
+    clearTimeout(timeOut);
     var nextX,nextY;
     var lastX = snakeXs[snakeXs.length-1];
     var lastY = snakeYs[snakeYs.length-1];
@@ -41,8 +50,22 @@ function moveSnake() {
     snakeXs.push(nextX);
     snakeYs.push(nextY);
     if(nextX == currentFruitX && nextY == currentFruitY) {
-        currentFruitX = Math.floor(Math.random()*gridSize);
-        currentFruitY = Math.floor(Math.random()*gridSize);
+        fruitCooldown = fruitSize;
+        while(true) {
+            var validSpot = true;
+            currentFruitX = Math.floor(Math.random()*gridSize);
+            currentFruitY = Math.floor(Math.random()*gridSize);
+            for(var i = 0; i < snakeXs.length; i++) {
+                if(snakeXs[i] == currentFruitX && snakeYs[i] == currentFruitY) {
+                    validSpot = false;
+                }
+            } if (validSpot) {break;}
+        }
+        snakeDelay -= (snakeDelay/200)**4*20;
+        score++;
+    }
+    if(fruitCooldown > 0) {
+        fruitCooldown--;
         // todo: make sure fruit not on snake
     } else {
         snakeXs.splice(0,1);
@@ -51,12 +74,42 @@ function moveSnake() {
     ctx.fillStyle = "white";
     ctx.fillRect(0,0,800,800);
     ctx.fillStyle = "red";
-    for(var i = 0; i < snakeXs.length; i++) {
+    for(var i = 0; i < snakeXs.length-1; i++) {
         ctx.fillRect(blockSize*snakeXs[i],blockSize*snakeYs[i],blockSize,blockSize);
     }
-    setTimeout(moveSnake,snakeDelay);
+    ctx.fillStyle = "green";
+    ctx.fillRect(currentFruitX*blockSize, currentFruitY*blockSize, blockSize, blockSize)
+    ctx.fillStyle = "blue";
+    ctx.fillRect(blockSize*nextX,blockSize*nextY,blockSize,blockSize);
+    ctx.fillStyle = "black";
+    ctx.fillText(score,790,30);
+    for(var i = 0; i < snakeXs.length-3; i++) {
+        if(snakeXs[i] == nextX && snakeYs[i] == nextY) {lose = true;}
+    }
+    if(lose) {
+        return;
+    }
+    timeOut = setTimeout(moveSnake,snakeDelay);
 }
 
-function keyPressed() {
-    //set dir, check if dir is possible, run moveSnake
+function keyPressed(e) {
+    if(e.key == "r") {
+        reset();
+    }
+    if (!lose) {
+        if(snakeDir == "RIGHT" || snakeDir == "LEFT") {
+            if(e.key == 'w') {
+                snakeDir = "UP";
+            } else if(e.key == 's') {
+                snakeDir = "DOWN";
+            } else {return;}
+        } else {
+            if(e.key == 'a') {
+                snakeDir = "LEFT";
+            } else if(e.key == 'd') {
+                snakeDir = "RIGHT";
+            } else {return;}
+        }
+        moveSnake();
+    }
 }
