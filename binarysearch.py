@@ -10,6 +10,6 @@ def deepen(low,high,guesses):
     elif inp == "y":
         return floor((high+low)/2),guesses
 
-print("Pick a number from 1 to 10000!")
+print("Pick a number from 1 to 1000000!")
 ans = deepen(0,10000,1)
 print("Your number is " + str(ans[0]) + ", I got it in " + str(ans[1]) + " trie(s)!")
